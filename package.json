@@ -1,0 +1,37 @@
+{
+  "name": "getter",
+  "description": "Helper for adding getters and setters into your object. For node and browser.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/fragphace/getter",
+  "author": {
+    "name": "Paweł Maciejewski",
+    "email": "fragphace@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fragphace/getter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fragphace/getter/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/fragphace/getter/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/getter",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "buster": "*",
+    "grunt-exec": "*",
+    "grunt-coffee": "*",
+    "grunt": "~0.3.17"
+  },
+  "keywords": []
+}
