@@ -17,7 +17,7 @@ buster.testCase('Getter', {
         this.obj = {
           foo: 'bar'
         };
-        return getter.mixinGetter(this.obj, 'foo');
+        return getter.mixinDefaultGetter(this.obj, 'foo');
       },
       'test if getter works': function() {
         return assert.equals(this.obj.getFoo(), 'bar');
@@ -46,7 +46,7 @@ buster.testCase('Getter', {
         this.obj = {
           foo: 'bar'
         };
-        return getter.mixinSetter(this.obj, 'foo');
+        return getter.mixinDefaultSetter(this.obj, 'foo');
       },
       'test if setter works': function() {
         this.obj.setFoo('abc');
@@ -107,25 +107,66 @@ buster.testCase('Getter', {
       }
     },
     'change default getter and setter': {
+      'valid getter and setter': {
+        setUp: function() {
+          return this.obj = getter.factory({
+            foo: {
+              value: 'bar',
+              getter: function() {
+                return this.foo + this.foo;
+              },
+              setter: function(val) {
+                return this.foo = val + val;
+              }
+            }
+          });
+        },
+        'test if getter is custom': function() {
+          return assert.equals(this.obj.getFoo(), 'barbar');
+        },
+        'test if setter is custom': function() {
+          this.obj.setFoo('bar');
+          return assert.equals(this.obj.foo, 'barbar');
+        }
+      },
+      'invalid getter': function() {
+        var _this = this;
+        return assert.exception(function() {
+          return getter.factory({
+            foo: {
+              value: 'bar',
+              getter: 'baz'
+            }
+          });
+        });
+      },
+      'invalid setter': function() {
+        var _this = this;
+        return assert.exception(function() {
+          return getter.factory({
+            foo: {
+              value: 'bar',
+              setter: 'baz'
+            }
+          });
+        });
+      }
+    },
+    'disable getter and setter': {
       setUp: function() {
         return this.obj = getter.factory({
           foo: {
             value: 'bar',
-            getter: function() {
-              return this.foo + this.foo;
-            },
-            setter: function(val) {
-              return this.foo = val + val;
-            }
+            getter: false,
+            setter: false
           }
         });
       },
-      'test if getter is custom': function() {
-        return assert.equals(this.obj.getFoo(), 'barbar');
+      'check if getter is disabled': function() {
+        return refute('getFoo' in this.obj);
       },
-      'test if setter is custom': function() {
-        this.obj.setFoo('bar');
-        return assert.equals(this.obj.foo, 'barbar');
+      'check if setter is disabled': function() {
+        return refute('setFoo' in this.obj);
       }
     }
   }

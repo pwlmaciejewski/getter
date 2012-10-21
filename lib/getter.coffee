@@ -5,42 +5,63 @@ module.exports =
 	getterName: (name) ->
 		'get' + @uppercaseFirstLetter name
 
+	setterName: (name) ->
+		'set' + @uppercaseFirstLetter name
+	
 	mixinFunction: (obj, name, fn) ->
 		obj[name] = fn
+
+	mixinGetter: (obj, name, getter) ->
+		@mixinFunction obj, @getterName(name), getter 
+	
+	mixinSetter: (obj, name, setter) ->
+		@mixinFunction obj, @setterName(name), setter
 
 	defaultGetter: (obj, name) ->
 		->
 			obj[name]
 
-	mixinGetter: (obj, name, customGetter) ->
-		obj[@getterName(name)] = if not customGetter then @defaultGetter obj, name else ->
-			customGetter.call obj
-
-	setterName: (name) ->
-		'set' + @uppercaseFirstLetter name
+	mixinDefaultGetter: (obj, name) ->
+		@mixinGetter obj, name, @defaultGetter obj, name
 
 	defaultSetter: (obj, name) ->
 		(val) ->
 			obj[name] = val
 
-	mixinSetter: (obj, name, customSetter) ->
-		obj[@setterName(name)] = if not customSetter then @defaultSetter obj, name else (val) ->
-			customSetter.call obj, val
-
-	mixinGetterAndSetter: (obj, name, customGetter, customSetter) ->
-		@mixinGetter obj, name, customGetter
-		@mixinSetter obj, name, customSetter
-
-	mixinValueGetterAndSetter: (obj, name, value, customGetter, customSetter) ->
-		obj[name] = value
-		@mixinGetterAndSetter obj, name, customGetter, customSetter
+	mixinDefaultSetter: (obj, name) ->
+		@mixinSetter obj, name, @defaultSetter obj, name
 
 	mixinKeyValueOption: (obj, name, option) ->
-		@mixinValueGetterAndSetter obj, name, option
+		obj[name] = option
+		@mixinGetter obj, name, @defaultGetter(obj, name)
+		@mixinSetter obj, name, @defaultSetter(obj, name)
+
+	validateKeyObjectOption: (option) ->
+		if 'value' not of option then new Error "Option object need to have a 'value' key"
+		else if 'getter' of option and typeof option.getter isnt 'function' and option.getter isnt false
+			new Error "Getter should be a function or false" 
+		else if 'setter' of option and typeof option.setter isnt 'function' and option.getter isnt false
+			new Error "Setter should be a function or false"
 
 	mixinKeyObjectOption: (obj, name, option) ->
-		if 'value' not of option then throw new Error "Option object need to have a 'value' key"
-		@mixinValueGetterAndSetter obj, name, option.value, option.getter, option.setter
+		error = @validateKeyObjectOption(option) 
+		if error then throw error
+
+		if 'getter' not of option 
+			getter = @defaultGetter obj, name
+		else if typeof option.getter is 'function'
+			getter = option.getter
+
+		if 'setter' not of option
+			setter = @defaultSetter obj, name
+		else if typeof option.setter is 'function'
+			setter = option.setter
+
+		obj[name] = option.value
+		if getter 
+			@mixinGetter obj, name, getter
+		if setter
+			@mixinSetter obj, name, setter
 
 	mixinOption: (obj, name, option) ->
 		if typeof option is 'object' 

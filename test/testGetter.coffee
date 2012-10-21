@@ -13,7 +13,7 @@ buster.testCase 'Getter',
 			setUp: ->
 				@obj = 
 					foo: 'bar'
-				getter.mixinGetter @obj, 'foo'
+				getter.mixinDefaultGetter @obj, 'foo'
 
 			'test if getter works': ->
 				assert.equals @obj.getFoo(), 'bar' 
@@ -37,7 +37,7 @@ buster.testCase 'Getter',
 			setUp: ->
 				@obj =
 					foo: 'bar'
-				getter.mixinSetter @obj, 'foo'
+				getter.mixinDefaultSetter @obj, 'foo'
 
 			'test if setter works': ->
 				@obj.setFoo 'abc'
@@ -85,18 +85,47 @@ buster.testCase 'Getter',
 							abc: 'def'
 
 		'change default getter and setter':
+			'valid getter and setter':
+				setUp: ->
+					@obj = getter.factory
+						foo: 
+							value: 'bar'
+							getter: ->
+								@foo + @foo
+							setter: (val) ->
+								@foo = val + val
+
+				'test if getter is custom': ->
+					assert.equals @obj.getFoo(), 'barbar'
+
+				'test if setter is custom': ->
+					@obj.setFoo 'bar'
+					assert.equals @obj.foo, 'barbar'
+
+			'invalid getter': ->
+				assert.exception =>
+					getter.factory
+						foo: 
+							value: 'bar'
+							getter: 'baz'
+
+			'invalid setter': ->
+				assert.exception =>
+					getter.factory 
+						foo:
+							value: 'bar'
+							setter: 'baz'
+
+		'disable getter and setter': 
 			setUp: ->
 				@obj = getter.factory
-					foo: 
+					foo:
 						value: 'bar'
-						getter: ->
-							@foo + @foo
-						setter: (val) ->
-							@foo = val + val
+						getter: false
+						setter: false
 
-			'test if getter is custom': ->
-				assert.equals @obj.getFoo(), 'barbar'
+			'check if getter is disabled': ->
+				refute 'getFoo' of @obj
 
-			'test if setter is custom': ->
-				@obj.setFoo 'bar'
-				assert.equals @obj.foo, 'barbar'
+			'check if setter is disabled': ->
+				refute 'setFoo' of @obj
