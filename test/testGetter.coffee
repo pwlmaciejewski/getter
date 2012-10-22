@@ -129,3 +129,21 @@ buster.testCase 'Getter',
 
 			'check if setter is disabled': ->
 				refute 'setFoo' of @obj
+
+	'mixin': 
+		setUp: ->
+			@mixObj = 
+				bac: 'baz'
+			@prop =
+				foo: 
+					value: 'bar'
+					getter: ->
+						@foo + @foo
+					setter: false
+			@obj = getter.factory @prop
+			getter.mixin @mixObj, @prop
+
+		'test if mixin extend object properly': ->
+			@obj.bac = 'baz'
+			assert.equals @obj, @mixObj
+

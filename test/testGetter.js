@@ -169,5 +169,27 @@ buster.testCase('Getter', {
         return refute('setFoo' in this.obj);
       }
     }
+  },
+  'mixin': {
+    setUp: function() {
+      this.mixObj = {
+        bac: 'baz'
+      };
+      this.prop = {
+        foo: {
+          value: 'bar',
+          getter: function() {
+            return this.foo + this.foo;
+          },
+          setter: false
+        }
+      };
+      this.obj = getter.factory(this.prop);
+      return getter.mixin(this.mixObj, this.prop);
+    },
+    'test if mixin extend object properly': function() {
+      this.obj.bac = 'baz';
+      return assert.equals(this.obj, this.mixObj);
+    }
   }
 });

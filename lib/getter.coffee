@@ -40,7 +40,7 @@ module.exports =
 		if 'value' not of option then new Error "Option object need to have a 'value' key"
 		else if 'getter' of option and typeof option.getter isnt 'function' and option.getter isnt false
 			new Error "Getter should be a function or false" 
-		else if 'setter' of option and typeof option.setter isnt 'function' and option.getter isnt false
+		else if 'setter' of option and typeof option.setter isnt 'function' and option.setter isnt false
 			new Error "Setter should be a function or false"
 
 	mixinPropertyFromOption: (obj, name, option, prop) ->
@@ -63,8 +63,12 @@ module.exports =
 		else
 			@mixinKeyValueOption obj, name, option
 
-	factory: (options) ->
+	factory: (options = {}) ->
 		res = {}
 		for name, option of options 
 			@mixinOption res, name, option
 		res
+
+	mixin: (obj = {}, options = {}) ->
+		for name, prop of @factory options
+			obj[name] = prop
