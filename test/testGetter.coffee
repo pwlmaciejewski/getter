@@ -146,4 +146,3 @@ buster.testCase 'Getter',
 		'test if mixin extend object properly': ->
 			@obj.bac = 'baz'
 			assert.equals @obj, @mixObj
-
