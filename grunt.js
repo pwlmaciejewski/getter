@@ -29,6 +29,7 @@ module.exports = function(grunt) {
   // External tasks
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-coffee');
+  grunt.loadNpmTasks('grunt-buster');
 
   // Tasks
   grunt.registerTask('test', 'exec:buster');

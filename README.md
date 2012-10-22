@@ -73,8 +73,14 @@ console.log('setFoo' in obj); // false
 
 ## Tests
 
-For Node.js and browser tests:
+For Node.js tests:
 
 ```
-grunt testall
+grunt test
+```
+
+For all tests (buster and phantomjs must be installed globally):
+
+```
+grunt buster
 ```
