@@ -13,7 +13,7 @@ npm install getter
 All you need to do is to pass an object and options to `mixin` function. Getter will create
 getters and setter for you:
 
-```javacript
+```javascript
 var getter = require('getter');
 var obj = {};
 
@@ -71,7 +71,7 @@ getter.mixin(obj, {
 console.log('setFoo' in obj); // false
 ```
 
-## Test
+## Tests
 
 For Node.js and browser tests:
 
