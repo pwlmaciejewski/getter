@@ -83,7 +83,7 @@ For Node.js tests:
 grunt test
 ```
 
-For all tests (buster and phantomjs must be installed globally):
+For all tests (`buster` and `phantomjs` must be installed globally):
 
 ```
 grunt buster
