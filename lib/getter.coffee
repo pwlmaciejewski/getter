@@ -43,25 +43,19 @@ module.exports =
 		else if 'setter' of option and typeof option.setter isnt 'function' and option.getter isnt false
 			new Error "Setter should be a function or false"
 
+	mixinPropertyFromOption: (obj, name, option, prop) ->
+		upperProp = @uppercaseFirstLetter(prop)
+		fn = option[prop] or @['default' + upperProp] obj, name
+		if option[prop] isnt false then @['mixin' + upperProp] obj, name, fn
+
+	forceMixinKeyOption: (obj, name, option) ->
+		obj[name] = option.value
+		@mixinPropertyFromOption obj, name, option, 'getter'
+		@mixinPropertyFromOption obj, name, option, 'setter'
+
 	mixinKeyObjectOption: (obj, name, option) ->
 		error = @validateKeyObjectOption(option) 
-		if error then throw error
-
-		if 'getter' not of option 
-			getter = @defaultGetter obj, name
-		else if typeof option.getter is 'function'
-			getter = option.getter
-
-		if 'setter' not of option
-			setter = @defaultSetter obj, name
-		else if typeof option.setter is 'function'
-			setter = option.setter
-
-		obj[name] = option.value
-		if getter 
-			@mixinGetter obj, name, getter
-		if setter
-			@mixinSetter obj, name, setter
+		if error then throw error else @forceMixinKeyOption obj, name, option
 
 	mixinOption: (obj, name, option) ->
 		if typeof option is 'object' 
