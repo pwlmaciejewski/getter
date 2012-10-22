@@ -4,9 +4,13 @@ Helper for adding getters and setters into your object. For node and browser.
 
 ## Installation
 
+For node.js:
+
 ```
 npm install getter
 ```
+
+For browser you need to include `lib/getter.js` into your page. Getter is AMD-friendly.
 
 ## Usage
 
