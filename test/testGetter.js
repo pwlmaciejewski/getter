@@ -83,7 +83,12 @@
         setUp: function() {
           return this.obj = getter.factory({
             foo: 'bar',
-            baz: false
+            baz: false,
+            abc: null,
+            cde: [1, 2],
+            fgh: function() {
+              return 'ijk';
+            }
           });
         },
         'test if private variables were created': function() {
