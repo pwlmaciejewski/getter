@@ -163,4 +163,15 @@
       'test if mixin extend object properly': ->
         @obj.bac = 'baz'
         assert.equals @obj, @mixObj
+
+    'inheritance': 
+      setUp: ->
+        @obj1 = {}
+        getter.mixin @obj1,
+          foo: 'bar'
+        @obj2 = Object.create @obj1
+
+      'test if set creates a new property in child object': ->
+        @obj2.setFoo 'baz'
+        assert @obj2.hasOwnProperty('foo')
 )()

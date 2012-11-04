@@ -208,6 +208,19 @@
         this.obj.bac = 'baz';
         return assert.equals(this.obj, this.mixObj);
       }
+    },
+    'inheritance': {
+      setUp: function() {
+        this.obj1 = {};
+        getter.mixin(this.obj1, {
+          foo: 'bar'
+        });
+        return this.obj2 = Object.create(this.obj1);
+      },
+      'test if set creates a new property in child object': function() {
+        this.obj2.setFoo('baz');
+        return assert(this.obj2.hasOwnProperty('foo'));
+      }
     }
   });
 })();
