@@ -170,8 +170,11 @@
         getter.mixin @obj1,
           foo: 'bar'
         @obj2 = Object.create @obj1
+        @obj2.setFoo 'baz'
 
       'test if set creates a new property in child object': ->
-        @obj2.setFoo 'baz'
         assert @obj2.hasOwnProperty('foo')
+
+      'test if getter get an property from child object': ->
+        assert.equals @obj2.getFoo(), 'baz'
 )()

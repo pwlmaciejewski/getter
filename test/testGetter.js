@@ -215,11 +215,14 @@
         getter.mixin(this.obj1, {
           foo: 'bar'
         });
-        return this.obj2 = Object.create(this.obj1);
+        this.obj2 = Object.create(this.obj1);
+        return this.obj2.setFoo('baz');
       },
       'test if set creates a new property in child object': function() {
-        this.obj2.setFoo('baz');
         return assert(this.obj2.hasOwnProperty('foo'));
+      },
+      'test if getter get an property from child object': function() {
+        return assert.equals(this.obj2.getFoo(), 'baz');
       }
     }
   });

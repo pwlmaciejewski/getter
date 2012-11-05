@@ -20,14 +20,14 @@
 
     defaultGetter: (obj, name) ->
       ->
-        obj[name]
+        @[name]
 
     mixinDefaultGetter: (obj, name) ->
       @mixinGetter obj, name, @defaultGetter obj, name
 
     defaultSetter: (obj, name) ->
       (val) ->
-        obj[name] = val
+        @[name] = val
 
     mixinDefaultSetter: (obj, name) ->
       @mixinSetter obj, name, @defaultSetter obj, name
